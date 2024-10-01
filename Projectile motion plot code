@@ -1,0 +1,67 @@
+#PHSX 216 Projectile Motion Lab plotting code
+#performs 2nd degree polynomial fit
+#Brianna Beller
+#Updated September 2024
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+#-----------------------------------------------------------------------#
+#----------UPDATE THIS SECTION!!!----------
+
+#DATA TO BE PLOTTED
+#UPDATE THE VARIABLE NAMES & NUMBERS (LEAVE BRACKETS/PARENTHESES AS IS)
+#variable names should start with a letter and must contain only letters, numbers, and underscores
+
+launch_angle = np.array([48, 45, 42, 40]) #what are units?   <-----
+
+impact_height = np.array([49.2, 62.7, 64.8, 65.6]) #what are units?   <-----
+
+err_impact_height = np.array([4.3, 1.3, 3.7, 2.4])                   #                 <-----
+
+#Re-assign variables as x, y, dy so that the remaining plotting code may remain generic
+#UPDATE VARIABLE NAMES (ON RHS OF EACH EQUAL SIGN) TO MATCH VARIABLE NAMES FOR DATA ABOVE
+
+x = launch_angle             #this should be the array you want to plot on the x axis #        <-----
+y = impact_height       #this should be the array you want to plot on the y axis #        <-----
+dy = err_impact_height        #this should be your error in y array                    #        <-----
+
+#UPDATE EACH OF THESE 3 STRINGS FOR YOUR PLOT LABELS AS YOU WANT THEM TO APPEAR
+
+plot_title= 'Launch Angle vs Impact Height'                                                                #                 <-----
+x_label= 'Launch angle [degrees]'                                                    #                 <-----
+y_label= 'Impact height [cm]'                                                    #                 <-----
+
+#-----------------------------------------------------------------------#
+#-----DON'T NEED TO CHANGE ANYTHING BEYOND THIS POINT!!!-----
+
+
+#size the plot
+plt.figure(figsize=(15,10))
+
+#create scatter plot
+plt.scatter(x, y, color='blue', marker='o')
+
+#create labels
+plt.xlabel(x_label)
+plt.ylabel(y_label)
+plt.title(plot_title)
+
+#fitting to a 2nd degree polynomial
+c,b,a=np.polynomial.polynomial.polyfit(x,y,2,w=dy)
+
+#Annotate with values of A, B, C from best fit polynomial
+plt.annotate('best fit line: $f(x)=Ax^2+Bx+C$',(0.05, 0.95), xycoords='axes fraction')
+
+plt.annotate('     A = {:.6f}'.format(a),(0.05, 0.9), xycoords='axes fraction')
+
+plt.annotate('     B = {:.6f}'.format(b),(0.05, 0.85), xycoords='axes fraction')
+
+plt.annotate('     C = {:.6f}'.format(c),(0.05, 0.8), xycoords='axes fraction')
+
+#Create fit line
+xnew = np.linspace(x.min(), x.max(), 300)
+fit = a*xnew**2 + b*xnew +c
+
+plt.plot(xnew, fit, color='green')
+plt.show()
